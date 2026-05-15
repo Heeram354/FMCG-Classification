@@ -12,7 +12,7 @@ import argparse
 import torch
 from PIL import Image
 
-# Add project root to path
+# Adding project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.config import MODEL_DIR, K_FOLDS, CLASS_NAMES, NUM_CLASSES
@@ -22,7 +22,7 @@ from src.utils import get_device
 
 
 def load_ensemble(device):
-    """Load all fold models for ensemble prediction."""
+    """Loading all fold models for ensemble prediction."""
     models = []
     for fold in range(K_FOLDS):
         model_path = os.path.join(MODEL_DIR, f"best_model_fold_{fold + 1}.pth")
@@ -38,12 +38,12 @@ def load_ensemble(device):
 @torch.no_grad()
 def predict_single(image_path: str, models: list, device):
     """
-    Predict class for a single image using ensemble.
+    Predicting class for a single image using ensemble.
     
     Returns:
         predicted_class (str), confidence (float), all_probs (dict)
     """
-    # Load and preprocess
+    # Loading and preprocessing
     image = Image.open(image_path).convert("RGB")
     transform = get_val_transforms()
     input_tensor = transform(image).unsqueeze(0).to(device)  # Add batch dim
@@ -73,19 +73,19 @@ def main():
     args = parser.parse_args()
 
     if not os.path.exists(args.image):
-        print(f"❌ Image not found: {args.image}")
+        print(f"Image not found: {args.image}")
         return
 
     device = get_device()
 
-    print("📦 Loading ensemble models...")
+    print("Loading ensemble models...")
     models = load_ensemble(device)
     if not models:
-        print("❌ No models found. Run training first!")
+        print(" No models found. Run training first!")
         return
-    print(f"  ✅ Loaded {len(models)} models")
+    print(f" Loaded {len(models)} models")
 
-    print(f"\n🔮 Predicting: {args.image}")
+    print(f"\nPredicting: {args.image}")
     predicted_class, confidence, all_probs = predict_single(args.image, models, device)
 
     print(f"\n{'='*40}")

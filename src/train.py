@@ -30,7 +30,7 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 from sklearn.model_selection import StratifiedKFold
 from tqdm import tqdm
 
-# Add project root to path
+# Addding project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.config import (
@@ -121,7 +121,7 @@ def train_fold(fold, train_indices, val_indices, all_samples, device):
     print(f"{'='*60}")
     print(f"  Train: {len(train_indices)} samples | Val: {len(val_indices)} samples")
 
-    # Create datasets with appropriate transforms
+    # Creating datasets with appropriate transforms
     train_dataset = FMCGDataset(
         [all_samples[i] for i in train_indices],
         transform=get_train_transforms(),
@@ -140,7 +140,7 @@ def train_fold(fold, train_indices, val_indices, all_samples, device):
         num_workers=NUM_WORKERS, pin_memory=False,
     )
 
-    # Build fresh model for this fold
+    # Building fresh model for this fold
     model = build_model().to(device)
     criterion = nn.CrossEntropyLoss(label_smoothing=LABEL_SMOOTHING)
 
@@ -151,8 +151,7 @@ def train_fold(fold, train_indices, val_indices, all_samples, device):
 
     # --------------------------------------------------------
     # Phase 1: Train classifier head only (backbone frozen)
-    # --------------------------------------------------------
-    print(f"\n  📌 Phase 1: Training classifier head ({PHASE1_EPOCHS} epochs)")
+    print(f"\n Phase 1: Training classifier head ({PHASE1_EPOCHS} epochs)")
     model.freeze_backbone()
     model.count_parameters()
 
@@ -183,8 +182,7 @@ def train_fold(fold, train_indices, val_indices, all_samples, device):
 
     # --------------------------------------------------------
     # Phase 2: Fine-tune with unfrozen backbone
-    # --------------------------------------------------------
-    print(f"\n  📌 Phase 2: Fine-tuning backbone ({PHASE2_EPOCHS} epochs)")
+    print(f"\n Phase 2: Fine-tuning backbone ({PHASE2_EPOCHS} epochs)")
     model.unfreeze_backbone(unfreeze_from=-2)
     model.count_parameters()
 
@@ -213,7 +211,7 @@ def train_fold(fold, train_indices, val_indices, all_samples, device):
             best_val_acc = val_acc
             best_model_state = copy.deepcopy(model.state_dict())
             patience_counter = 0
-            marker = " ⭐ best"
+            marker = " best"
         else:
             patience_counter += 1
 
@@ -223,16 +221,16 @@ def train_fold(fold, train_indices, val_indices, all_samples, device):
               f"LR: {scheduler.get_last_lr()[0]:.2e}{marker}")
 
         if patience_counter >= EARLY_STOPPING_PATIENCE:
-            print(f"    ⏹ Early stopping at epoch {epoch+1} (patience={EARLY_STOPPING_PATIENCE})")
+            print(f"Early stopping at epoch {epoch+1} (patience={EARLY_STOPPING_PATIENCE})")
             break
 
-    # Save best model for this fold
+    # Saving best model for this fold
     model_path = os.path.join(MODEL_DIR, f"best_model_fold_{fold+1}.pth")
     torch.save(best_model_state, model_path)
-    print(f"\n  💾 Best Val Accuracy: {best_val_acc:.4f}")
-    print(f"  💾 Saved model: {model_path}")
+    print(f"\n Best Val Accuracy: {best_val_acc:.4f}")
+    print(f" Saved model: {model_path}")
 
-    # Plot training curves
+    # Plotting training curves
     plot_training_history(history, fold)
 
     return best_val_acc, history
@@ -246,30 +244,30 @@ def main():
     print("  FMCG Product Classification — Training Pipeline")
     print("=" * 60)
 
-    # 1. Set seed for reproducibility
+    # 1. Setting seed for reproducibility
     set_seed(SEED)
     device = get_device()
 
-    # 2. Load and auto-label dataset
-    print("\n📁 Loading dataset...")
+    # 2. Loading and auto-labelling dataset
+    print("\n Loading dataset...")
     all_samples = extract_labels_from_filenames()
     save_labels_csv(all_samples)
 
-    # Extract labels for stratification
+    # Extracting labels for stratification
     all_labels = [label for _, label in all_samples]
     all_paths = [path for path, _ in all_samples]
 
-    # Plot class distribution
+    # Plotting class distribution
     plot_class_distribution(all_labels)
 
-    # Print dataset summary
-    print(f"\n📊 Dataset Summary:")
+    # Printing dataset summary
+    print(f"\n Dataset Summary:")
     for cls_name in CLASS_NAMES:
         count = sum(1 for _, l in all_samples if CLASS_NAMES[l] == cls_name)
         print(f"    {cls_name}: {count} images")
 
-    # 3. K-Fold Cross Validation
-    print(f"\n🔄 Starting {K_FOLDS}-Fold Stratified Cross Validation...")
+    # 3. K-Fold Cross Validation 
+    print(f"\n Starting {K_FOLDS}-Fold Stratified Cross Validation...")
     skf = StratifiedKFold(n_splits=K_FOLDS, shuffle=True, random_state=SEED)
 
     fold_accuracies = []
@@ -291,14 +289,14 @@ def main():
     print(f"\n  Per-Fold Accuracies:")
     for i, acc in enumerate(fold_accuracies):
         print(f"    Fold {i+1}: {acc:.4f} ({acc*100:.2f}%)")
-    print(f"\n  📈 Mean Accuracy: {mean_acc:.4f} ({mean_acc*100:.2f}%)")
-    print(f"  📊 Std Deviation: {std_acc:.4f}")
-    print(f"  ⏱  Total Time: {elapsed:.1f}s ({elapsed/60:.1f} min)")
+    print(f"\n Mean Accuracy: {mean_acc:.4f} ({mean_acc*100:.2f}%)")
+    print(f" Std Deviation: {std_acc:.4f}")
+    print(f" Total Time: {elapsed:.1f}s ({elapsed/60:.1f} min)")
 
-    target_met = "✅ TARGET MET" if mean_acc >= 0.95 else "❌ BELOW TARGET"
-    print(f"\n  🎯 95% Target: {target_met}")
+    target_met = "TARGET MET" if mean_acc >= 0.95 else "❌ BELOW TARGET"
+    print(f"\n 95% Target: {target_met}")
 
-    # Save results
+    # Saving results
     results = {
         "fold_accuracies": fold_accuracies,
         "mean_accuracy": float(mean_acc),
@@ -310,7 +308,7 @@ def main():
     results_path = os.path.join(REPORTS_DIR, "training_results.json")
     with open(results_path, "w") as f:
         json.dump(results, f, indent=2)
-    print(f"  💾 Saved results: {results_path}")
+    print(f"Saved results: {results_path}")
 
 
 if __name__ == "__main__":

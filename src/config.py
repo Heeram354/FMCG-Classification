@@ -15,7 +15,7 @@ MODEL_DIR = os.path.join(OUTPUT_DIR, "models")
 PLOTS_DIR = os.path.join(OUTPUT_DIR, "plots")
 REPORTS_DIR = os.path.join(OUTPUT_DIR, "reports")
 
-# Create output directories
+# Creating output directories
 for d in [OUTPUT_DIR, MODEL_DIR, PLOTS_DIR, REPORTS_DIR]:
     os.makedirs(d, exist_ok=True)
 

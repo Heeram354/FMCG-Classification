@@ -17,7 +17,7 @@ from sklearn.metrics import (
     f1_score,
 )
 
-# Add project root to path
+# Adding project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.config import (
@@ -44,9 +44,9 @@ def load_fold_models(device):
             model.to(device)
             model.eval()
             models.append(model)
-            print(f"  ✅ Loaded model: Fold {fold + 1}")
+            print(f" Loaded model: Fold {fold + 1}")
         else:
-            print(f"  ⚠️  Model not found: {model_path}")
+            print(f"  Model not found: {model_path}")
     return models
 
 
@@ -96,16 +96,16 @@ def main():
     set_seed(SEED)
     device = get_device()
 
-    # Load all fold models
-    print("\n📦 Loading ensemble models...")
+    # Loading all fold models
+    print("\n Loading ensemble models...")
     models = load_fold_models(device)
 
     if not models:
-        print("❌ No models found. Run training first!")
+        print(" No models found. Run training first!")
         return
 
-    # Load full dataset with val transforms (no augmentation)
-    print("\n📁 Loading dataset...")
+    # Loading full dataset with val transforms (no augmentation)
+    print("\n Loading dataset...")
     all_samples = extract_labels_from_filenames()
 
     dataset = FMCGDataset(all_samples, transform=get_val_transforms())
@@ -115,7 +115,7 @@ def main():
     )
 
     # Ensemble predictions on full dataset
-    print("\n🔮 Running ensemble predictions...")
+    print("\n Running ensemble predictions...")
     images, true_labels, pred_labels, pred_confidences, all_probs = ensemble_predict(
         models, loader, device
     )
@@ -130,13 +130,13 @@ def main():
     print(f"\n{'='*60}")
     print(f"  EVALUATION RESULTS")
     print(f"{'='*60}")
-    print(f"\n  🎯 Overall Accuracy:     {accuracy:.4f} ({accuracy*100:.2f}%)")
-    print(f"  📊 F1 Score (macro):     {f1_macro:.4f}")
-    print(f"  📊 F1 Score (weighted):  {f1_weighted:.4f}")
-    print(f"  📊 Mean Confidence:      {pred_confidences.mean():.4f}")
+    print(f"\n  Overall Accuracy:     {accuracy:.4f} ({accuracy*100:.2f}%)")
+    print(f"  F1 Score (macro):     {f1_macro:.4f}")
+    print(f"  F1 Score (weighted):  {f1_weighted:.4f}")
+    print(f"  Mean Confidence:      {pred_confidences.mean():.4f}")
 
-    target_met = "✅ TARGET MET" if accuracy >= 0.95 else "❌ BELOW TARGET"
-    print(f"\n  🎯 95% Target: {target_met}")
+    target_met = " TARGET MET" if accuracy >= 0.95 else "❌ BELOW TARGET"
+    print(f"\n 95% Target: {target_met}")
 
     # Classification report
     report = classification_report(
@@ -144,18 +144,17 @@ def main():
         target_names=CLASS_NAMES,
         digits=4,
     )
-    print(f"\n  📋 Classification Report:\n{report}")
+    print(f"\n  Classification Report:\n{report}")
 
     # Confusion matrix
     cm = confusion_matrix(true_labels, pred_labels)
-    print(f"  📋 Confusion Matrix:")
+    print(f" Confusion Matrix:")
     print(f"  {cm}")
 
     # --------------------------------------------------------
     # Save outputs
-    # --------------------------------------------------------
 
-    # Save classification report
+    # Saving classification report
     report_path = os.path.join(REPORTS_DIR, "classification_report.txt")
     with open(report_path, "w") as f:
         f.write("FMCG Product Classification — Evaluation Report\n")
@@ -170,9 +169,9 @@ def main():
         f.write(f"\n{'='*50}\n")
         f.write(f"\nClassification Report:\n{report}\n")
         f.write(f"\nConfusion Matrix:\n{cm}\n")
-    print(f"  💾 Saved report: {report_path}")
+    print(f" Saved report: {report_path}")
 
-    # Save metrics as JSON
+    # Saving metrics as JSON
     metrics = {
         "accuracy": float(accuracy),
         "f1_macro": float(f1_macro),
@@ -194,15 +193,15 @@ def main():
     metrics_path = os.path.join(REPORTS_DIR, "evaluation_metrics.json")
     with open(metrics_path, "w") as f:
         json.dump(metrics, f, indent=2)
-    print(f"  💾 Saved metrics: {metrics_path}")
+    print(f" Saved metrics: {metrics_path}")
 
-    # Plot confusion matrix
+    # Plotting confusion matrix
     plot_confusion_matrix(cm)
 
-    # Plot sample predictions
+    # Plotting sample predictions
     plot_sample_predictions(images, true_labels, pred_labels, pred_confidences)
 
-    print(f"\n✅ Evaluation complete! All outputs saved to: {REPORTS_DIR}")
+    print(f"\n Evaluation complete! All outputs saved to: {REPORTS_DIR}")
 
 
 if __name__ == "__main__":

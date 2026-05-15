@@ -23,7 +23,6 @@ from src.config import (
 
 # ============================================================
 # Automatic Label Extraction
-# ============================================================
 
 def extract_labels_from_filenames(dataset_dir: str = DATASET_DIR) -> list:
     """
@@ -47,9 +46,9 @@ def extract_labels_from_filenames(dataset_dir: str = DATASET_DIR) -> list:
                 label_idx = CLASS_TO_IDX[category]
                 samples.append((filepath, label_idx))
             else:
-                print(f"  ⚠️  Unknown category '{category}' in file: {fname}")
+                print(f"   Unknown category '{category}' in file: {fname}")
 
-    print(f"  ✅ Auto-labeled {len(samples)} images across {len(CLASS_NAMES)} classes")
+    print(f"  Auto-labeled {len(samples)} images across {len(CLASS_NAMES)} classes")
     return samples
 
 
@@ -67,12 +66,11 @@ def save_labels_csv(samples: list, output_path: str = None):
                 label_idx,
                 CLASS_NAMES[label_idx],
             ])
-    print(f"  💾 Saved labels to: {output_path}")
+    print(f"  Saved labels to: {output_path}")
 
 
 # ============================================================
 # Data Augmentation Transforms
-# ============================================================
 
 def get_train_transforms():
     """
@@ -114,7 +112,6 @@ def get_val_transforms():
 
 # ============================================================
 # Dataset Class
-# ============================================================
 
 class FMCGDataset(Dataset):
     """
@@ -147,7 +144,6 @@ class FMCGDataset(Dataset):
 
 # ============================================================
 # Mixup Augmentation
-# ============================================================
 
 def mixup_data(x, y, alpha=0.2):
     """

@@ -26,13 +26,13 @@ def get_device():
     """Get the best available device (MPS for M1 Mac, CUDA, or CPU)."""
     if torch.backends.mps.is_available():
         device = torch.device("mps")
-        print("✅ Using Apple M1 GPU (MPS)")
+        print("Using Apple M1 GPU (MPS)")
     elif torch.cuda.is_available():
         device = torch.device("cuda")
-        print(f"✅ Using CUDA GPU: {torch.cuda.get_device_name(0)}")
+        print(f"Using CUDA GPU: {torch.cuda.get_device_name(0)}")
     else:
         device = torch.device("cpu")
-        print("⚠️  Using CPU (training will be slower)")
+        print("Using CPU (training will be slower)")
     return device
 
 
@@ -63,7 +63,7 @@ def plot_training_history(history: dict, fold: int, save: bool = True):
     if save:
         path = os.path.join(PLOTS_DIR, f"training_fold_{fold + 1}.png")
         plt.savefig(path, dpi=150, bbox_inches="tight")
-        print(f"  📊 Saved training plot: {path}")
+        print(f" Saved training plot: {path}")
     plt.close()
 
 
@@ -88,7 +88,7 @@ def plot_confusion_matrix(cm, save: bool = True, filename: str = "confusion_matr
     if save:
         path = os.path.join(PLOTS_DIR, filename)
         plt.savefig(path, dpi=150, bbox_inches="tight")
-        print(f"  📊 Saved confusion matrix: {path}")
+        print(f" Saved confusion matrix: {path}")
     plt.close()
 
 
@@ -134,7 +134,7 @@ def plot_sample_predictions(images, true_labels, pred_labels, pred_probs,
     if save:
         path = os.path.join(PLOTS_DIR, filename)
         plt.savefig(path, dpi=150, bbox_inches="tight")
-        print(f"  📊 Saved sample predictions: {path}")
+        print(f" Saved sample predictions: {path}")
     plt.close()
 
 
@@ -156,5 +156,5 @@ def plot_class_distribution(labels, save: bool = True, filename: str = "class_di
     if save:
         path = os.path.join(PLOTS_DIR, filename)
         plt.savefig(path, dpi=150, bbox_inches="tight")
-        print(f"  📊 Saved class distribution: {path}")
+        print(f" Saved class distribution: {path}")
     plt.close()

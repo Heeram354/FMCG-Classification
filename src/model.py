@@ -29,15 +29,15 @@ class FMCGClassifier(nn.Module):
     def __init__(self):
         super().__init__()
 
-        # Load pre-trained EfficientNet-B0 backbone
+        # Loading pre-trained EfficientNet-B0 backbone
         self.backbone = timm.create_model(
             MODEL_NAME,
             pretrained=PRETRAINED,
-            num_classes=0,         # Remove original classifier
-            global_pool="avg",     # Keep global average pooling
+            num_classes=0,         # Removing original classifier
+            global_pool="avg",     # Keeping global average pooling
         )
 
-        # Get the feature dimension from backbone
+        # Getting the feature dimension from backbone
         self.feature_dim = self.backbone.num_features  # 1280 for efficientnet_b0
 
         # Custom classification head with regularization
@@ -49,7 +49,7 @@ class FMCGClassifier(nn.Module):
             nn.Linear(HIDDEN_DIM, NUM_CLASSES),
         )
 
-        # Initialize classifier weights
+        # Initializing classifier weights
         self._init_classifier()
 
     def _init_classifier(self):
@@ -77,7 +77,7 @@ class FMCGClassifier(nn.Module):
         """
         for param in self.backbone.parameters():
             param.requires_grad = False
-        print("  🧊 Backbone FROZEN — training classifier head only")
+        print("  Backbone FROZEN — training classifier head only")
 
     def unfreeze_backbone(self, unfreeze_from: int = -2):
         """
@@ -91,13 +91,13 @@ class FMCGClassifier(nn.Module):
         for param in self.backbone.parameters():
             param.requires_grad = False
 
-        # Unfreeze the last N blocks
+        # Unfreezing the last N blocks
         blocks = list(self.backbone.blocks)
         for block in blocks[unfreeze_from:]:
             for param in block.parameters():
                 param.requires_grad = True
 
-        # Always unfreeze the final batch norm and head-related layers
+        # Always unfreezing the final batch norm and head-related layers
         if hasattr(self.backbone, "conv_head"):
             for param in self.backbone.conv_head.parameters():
                 param.requires_grad = True
@@ -106,7 +106,7 @@ class FMCGClassifier(nn.Module):
                 param.requires_grad = True
 
         n_unfrozen = abs(unfreeze_from)
-        print(f"  🔥 Backbone PARTIALLY UNFROZEN — last {n_unfrozen} blocks + head trainable")
+        print(f" Backbone PARTIALLY UNFROZEN — last {n_unfrozen} blocks + head trainable")
 
     def count_parameters(self):
         """Count total and trainable parameters."""
@@ -120,5 +120,5 @@ class FMCGClassifier(nn.Module):
 def build_model():
     """Factory function to create and return the FMCG classifier."""
     model = FMCGClassifier()
-    print(f"  ✅ Built {MODEL_NAME} with {NUM_CLASSES}-class head")
+    print(f" Built {MODEL_NAME} with {NUM_CLASSES}-class head")
     return model
