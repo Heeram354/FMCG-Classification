@@ -2,11 +2,11 @@
 
 > Achieving **99% accuracy** using only **100 labeled images** through transfer learning, aggressive data augmentation, and ensemble methods.
 
-## 🎯 Problem Statement
+## Problem Statement
 
 In FMCG and retail computer vision (shelf-auditing, planogram compliance), annotating thousands of images per product SKU is impractical. This project demonstrates how to achieve **production-grade accuracy (≥95%)** with only **100 labeled images** across 4 product categories.
 
-## 📊 Results
+##  Results
 
 | Metric | Value |
 |--------|-------|
@@ -36,7 +36,7 @@ In FMCG and retail computer vision (shelf-auditing, planogram compliance), annot
 | Fold 5 | 95.0% |
 | **Mean ± Std** | **96.0% ± 3.7%** |
 
-## 🧠 Methodology
+## Methodology
 
 ### Key Techniques Used
 
@@ -62,7 +62,7 @@ In FMCG and retail computer vision (shelf-auditing, planogram compliance), annot
 
 8. **Automated Labeling** — Labels extracted from filenames (`category (N).jpg`), requiring **zero manual annotation effort**.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 heeram assignment/
@@ -84,7 +84,7 @@ heeram assignment/
 └── README.md                      # This file
 ```
 
-## 🚀 Setup & Usage
+## Setup & Usage
 
 ### Prerequisites
 
@@ -154,7 +154,7 @@ Output:
     chitato       0.16%
 ```
 
-## 📈 How We Overcome the Low-Data Constraint
+## How We Overcome the Low-Data Constraint
 
 | Challenge | Solution | Impact |
 |-----------|----------|--------|
@@ -165,7 +165,7 @@ Output:
 | Validation reliability | 5-fold stratified CV | Every sample validated, robust accuracy estimate |
 | Single model variance | Ensemble of 5 models | Reduces prediction errors by averaging |
 
-## 🔧 Technology Stack
+## Technology Stack
 
 - **PyTorch** — Deep learning framework
 - **timm** — Pre-trained model library (EfficientNet-B0)
@@ -174,6 +174,6 @@ Output:
 - **matplotlib + seaborn** — Visualization
 - **Apple MPS** — GPU acceleration on M1 Mac
 
-## 📄 License
+##  License
 
 This project is for assessment purposes.
