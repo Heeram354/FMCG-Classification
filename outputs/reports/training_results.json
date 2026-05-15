@@ -3,12 +3,12 @@
     1.0,
     1.0,
     0.95,
-    0.95,
+    0.9,
     0.95
   ],
-  "mean_accuracy": 0.9700000000000001,
-  "std_accuracy": 0.024494897427831806,
-  "training_time_seconds": 142.9722409248352,
+  "mean_accuracy": 0.96,
+  "std_accuracy": 0.03741657386773941,
+  "training_time_seconds": 193.961816072464,
   "k_folds": 5,
   "target_met": true
 }

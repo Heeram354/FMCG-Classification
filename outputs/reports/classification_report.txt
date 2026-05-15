@@ -1,0 +1,32 @@
+FMCG Product Classification — Evaluation Report
+==================================================
+
+Overall Accuracy:     0.9900 (99.00%)
+F1 Score (macro):     0.9900
+F1 Score (weighted):  0.9900
+Mean Confidence:      0.9219
+Ensemble Models:      5
+Total Samples:        100
+
+95% Target:  TARGET MET
+
+==================================================
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        aqua     0.9615    1.0000    0.9804        25
+     chitato     1.0000    1.0000    1.0000        25
+   pepsodent     1.0000    0.9600    0.9796        25
+     shampoo     1.0000    1.0000    1.0000        25
+
+    accuracy                         0.9900       100
+   macro avg     0.9904    0.9900    0.9900       100
+weighted avg     0.9904    0.9900    0.9900       100
+
+
+Confusion Matrix:
+[[25  0  0  0]
+ [ 0 25  0  0]
+ [ 1  0 24  0]
+ [ 0  0  0 25]]
