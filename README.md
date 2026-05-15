@@ -152,7 +152,6 @@ Output:
     shampoo       0.29%
     chitato       0.16%
 ```
-
 ## How We Overcome the Low-Data Constraint
 
 | Challenge | Solution | Impact |
@@ -171,8 +170,7 @@ Output:
 - **torchvision** — Image transforms and augmentation
 - **scikit-learn** — Cross-validation, metrics
 - **matplotlib + seaborn** — Visualization
-- **Apple MPS** — GPU acceleration on M1 Mac
-
+- 
 ##  License
 
 This project is for assessment purposes.
