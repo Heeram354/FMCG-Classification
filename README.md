@@ -89,7 +89,6 @@ heeram assignment/
 ### Prerequisites
 
 - Python 3.10+
-- macOS (Apple Silicon M1/M2) or Linux with CUDA GPU
 
 ### Installation
 
